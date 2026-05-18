@@ -22,6 +22,6 @@ USER appuser
 EXPOSE 8081
 
 HEALTHCHECK --interval=30s --timeout=10s --retries=5 \
-  CMD wget -qO- http://localhost:8081/actuator/health || exit 1
+  CMD wget -qO- http://localhost:8081/api/v1/despachos || exit 1
 
 ENTRYPOINT ["java", "-jar", "-Djava.security.egd=file:/dev/./urandom", "app.jar"]
