@@ -1,4 +1,4 @@
-# CITT Innovatech — Backend Despachos (Spring Boot)
+# ITPCARGO CITT — Backend Despachos (Spring Boot)
 
 API REST para la gestión de órdenes de despacho. Desarrollado con Spring Boot 3, Java 17, JPA/Hibernate y MySQL 8.
 
@@ -134,7 +134,7 @@ El despliegue automático se realiza vía GitHub Actions al hacer push a la rama
 3. Login a Amazon ECR
 4. Build de imagen Docker con Maven
 5. Push a ECR (`citt-backend-despachos:latest`)
-6. SSH al EC2 backend y `docker pull` + `docker restart`
+6. SSM send-command a EC2 backend: `docker pull` + `docker run`
 
 ### Secrets de GitHub requeridos
 
@@ -143,8 +143,7 @@ El despliegue automático se realiza vía GitHub Actions al hacer push a la rama
 | `AWS_ACCESS_KEY_ID` | Credencial AWS Academy |
 | `AWS_SECRET_ACCESS_KEY` | Credencial AWS Academy |
 | `AWS_SESSION_TOKEN` | Token de sesión (expira ~4h) |
-| `EC2_HOST` | IP pública del EC2 backend |
-| `EC2_SSH_KEY` | Clave privada SSH (contenido del .pem) |
+| `EC2_INSTANCE_ID` | ID de la instancia EC2 (sin IP — usa SSM) |
 | `DB_PASS` | Contraseña MySQL |
 
 ## Infraestructura AWS
@@ -173,6 +172,5 @@ El backend no es accesible directamente desde internet. Toda comunicación pasa 
   ALTER USER 'citt_user'@'%' IDENTIFIED WITH mysql_native_password BY 'C1ttP4ss2026!';
   FLUSH PRIVILEGES;
   ```
-- Las IPs públicas del EC2 cambian en cada reinicio del Learner Lab. Actualizar el secret `EC2_HOST`.
-- El `AWS_SESSION_TOKEN` expira cada ~4 horas. Actualizar los secrets antes de hacer push.
+- El `AWS_SESSION_TOKEN` expira cada ~4 horas. Actualizar los 3 secrets AWS antes de hacer push.
 - El servicio de despachos depende del servicio de ventas para obtener el `idCompra` de referencia.
